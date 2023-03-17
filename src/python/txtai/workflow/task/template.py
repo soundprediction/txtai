@@ -50,7 +50,10 @@ class TemplateTask(Task):
                 return self.formatter.format(self.template, **{f"arg{i}": x for i, x in enumerate(element)})
 
             # Default behavior is to use input as {text} parameter in prompt template
-            return self.formatter.format(self.template, text=element)
+            try:
+                return self.formatter.format(self.template, text=element)
+            except KeyError:
+                return self.formatter.format(self.template, answer=element, reference="")
 
         # Return original inputs when no prompt provided
         return element
